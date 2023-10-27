@@ -13,6 +13,8 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 
 <ol>
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS" onclick="_blank">Ddos tools (python,golang,c)</a></li>
+- In the DDOS tools folder, you will see two other folders that are for UDP and TCP, you can choose, download and do your work. 
+- DDOS tools are mostly written in C and contain almost all DDOS methods, a few are written in python and golang, which are very powerful and clean. 
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20Has%20a%20web%20panel" onclick="_blank">Web botnets + Panel (php,javascript,css,html)</a></li>
 
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20WebSocket" onclick="_blank">Websocket botnets </a></li>
