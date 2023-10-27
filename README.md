@@ -13,4 +13,9 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 
 <ol>
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS" onclick="_blank">Ddos tools (python,golang,c)</a></li>
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20Has%20a%20web%20panel" onclick="_blank">Web botnets + Panel (php,javascript,css,html)</a></li>
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20WebSocket" onclick="_blank">Websocket botnets </a></li>
 </ol>
+
+
