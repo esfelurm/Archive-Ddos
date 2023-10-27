@@ -4,6 +4,10 @@
 
 #### An archive of various DDOS and Botnet tools with many differences ☠️
 
+## What is botnet? 
+
+A botnet is a network of computers that is under the control of a person or group and uses them as intermediaries to carry out malicious activities without the knowledge of the owners of the computers. In fact, the various computers in the botnet are known as "bots" and are controlled by a controlled server. 
+
 # Info
 
 We have collected more than 100 botnets and DDOS tools for you to develop, use or set as your model! 
@@ -35,4 +39,8 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 - These types of botnets are mostly in the form of web sockets (that is, they have a client file and a server file), which I'm sure you know better, so I won't give an explanation. 
 </ol>
 
+## tip 
 
+`Please don't clone the entire repository (unless you need it) because it will take up a lot of your internet, so select it and then download it. `
+
+#### I hope you use it well 
