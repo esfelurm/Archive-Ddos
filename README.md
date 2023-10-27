@@ -54,6 +54,12 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 
 ------------------------------------
 
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS/DOS%20JAVASCRIPT" onclick="_blank">DDOS JAVASCRIPT</a></li>
+
+- JavaScript DDoS or Distributed Denial of Service means an attack that uses JavaScript codes to temporarily or permanently limit server resources and make the service unavailable to normal users. In this type of attacks, attackers use multiple devices (such as JavaScript bots) to send many requests to the server at the same time and cause the service to crash.
+
+------------------------------------
+
 </ol>
 
 ## tip 
