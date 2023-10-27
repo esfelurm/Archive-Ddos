@@ -42,7 +42,18 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20WebSocket" onclick="_blank">Websocket botnets </a></li>
 
-- These types of botnets are mostly in the form of web sockets (that is, they have a client file and a server file), which I'm sure you know better, so I won't give an explanation. 
+- These types of botnets are mostly in the form of web sockets (that is, they have a client file and a server file), which I'm sure you know better, so I won't give an explanation.
+
+------------------------------------
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/iot%20Botnet" onclick="_blank">Iot Botnet</a></li>
+
+- <h4>What is IoT botnet? </h4>
+
+- IoT botnets are networks created by hackers to control devices connected to the Internet of Things (IoT). These devices can include CCTV cameras, home routers, smart lighting systems and other devices. By taking advantage of security vulnerabilities in these devices, hackers connect them to their network and use them for their purposes such as DDoS attacks, espionage, and information theft. These networks have become one of the biggest security threats in the Internet world due to the high number of devices connected to the Internet of Things and the lack of attention to their security.
+
+------------------------------------
+
 </ol>
 
 ## tip 
