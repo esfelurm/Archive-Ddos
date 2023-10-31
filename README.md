@@ -28,6 +28,8 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 
 - <h4><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS/LAYER%204">Layer 4</a></h4>
 
+- <h4><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS/LAYER%203">Layer 3</a></h4>
+
 ------------------------------------
 
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Botnet%20Has%20a%20web%20panel" onclick="_blank">Web botnets + Panel (php,javascript,css,html)</a></li>
@@ -57,6 +59,30 @@ In order for this archive to reach everyone, give it a Star and publish the arch
 <li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS/DOS%20JAVASCRIPT" onclick="_blank">DDOS JAVASCRIPT</a></li>
 
 - JavaScript DDoS or Distributed Denial of Service means an attack that uses JavaScript codes to temporarily or permanently limit server resources and make the service unavailable to normal users. In this type of attacks, attackers use multiple devices (such as JavaScript bots) to send many requests to the server at the same time and cause the service to crash.
+
+------------------------------------
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Exploits" onclick="_blank">Exploits</a></li>
+
+- A series of famous exploits are prepared for your attacks 
+
+------------------------------------
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Bypass" onclick="_blank">Bypass</a></li>
+
+- A Bypass series is prepared for your attacks in layer 4, tcp/udp
+
+------------------------------------
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Compilers" onclick="_blank">Compilers</a></li>
+
+- We have prepared a series of pure compilers with C and Python languages ​​to compile client files (infecting).
+
+------------------------------------
+
+<li><a href="https://github.com/esfelurm/Archive-Ddos/tree/main/Tools%20DDOS/Amps" onclick="_blank">Amps</a></li>
+
+- We have over 100 different Amps for you to develop or use 
 
 ------------------------------------
 
